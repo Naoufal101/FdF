@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include "libft/libft.h"
 #include "gnl/get_next_line.h"
+#include "MLX42/include/MLX42/MLX42.h"
 
+#define WIDTH 512
+#define HEIGHT 512
 
 typedef struct s_coordinates
 {
@@ -298,6 +301,55 @@ void    print_coordinates(t_coordinates **clean_map, t_map_size *map)
     }
 }
 
+void    ft_draw(t_coordinates **clean_map, t_map_size *map, mlx_image_t* image)
+{
+    int rows;
+    int columns;
+
+    rows = 0;
+    while (rows < map->h)
+    {
+        columns = 0;
+        while (columns < map->w)
+        {
+            mlx_put_pixel(image, columns, rows, 0xFFFFFFFF);
+            columns++;
+        }
+        rows++;
+    }
+}
+
+void    draw_three_D(t_coordinates **clean_map, t_map_size *map)
+{
+    mlx_t* mlx;
+    mlx_image_t* image;
+
+	// Gotta error check this stuff
+	if (!(mlx = mlx_init(WIDTH, HEIGHT, "fil de fer", false)))
+	{
+        ft_free((void **) clean_map);
+		puts(mlx_strerror(mlx_errno));
+		return ;
+	}
+	if (!(image = mlx_new_image(mlx, WIDTH, HEIGHT)))
+	{
+        ft_free((void **)clean_map);
+		mlx_close_window(mlx);
+		puts(mlx_strerror(mlx_errno));
+		return ;
+	}
+	if (mlx_image_to_window(mlx, image, 0, 0) == -1)
+	{
+        ft_free((void **) clean_map);
+		mlx_close_window(mlx);
+		puts(mlx_strerror(mlx_errno));
+		return ;
+	}
+    ft_draw(clean_map, map, image);
+    mlx_loop(mlx);
+	mlx_terminate(mlx);
+}
+
 int main(int argc, char **argv)
 {
     t_map_size      map;
@@ -312,4 +364,5 @@ int main(int argc, char **argv)
     }
     clean_map = get_coordinates(argv[1], &map);
     print_coordinates(clean_map, &map);
+    draw_three_D(clean_map, &map);
 }

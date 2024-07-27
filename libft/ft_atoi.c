@@ -30,12 +30,6 @@ int	ft_atoi(const char *str)
 		i++;
 	}
 	while (str[i] >= '0' && str[i] <= '9')
-	{
 		num = num * 10 + (str[i++] - '0');
-		if (num >= 9223372036854775807 && sign == 1)
-			return (-1);
-		if (num > 9223372036854775807 && sign == -1)
-			return (0);
-	}
 	return (num * sign);
 }

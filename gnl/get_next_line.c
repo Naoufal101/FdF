@@ -108,7 +108,6 @@ char	*ft_line(t_blist **list)
 char	*get_next_line(int fd)
 {
 	static t_blist	*blst;
-	t_blist			*new;
 	char			*buffer;
 
 	buffer = 0;
@@ -117,7 +116,6 @@ char	*get_next_line(int fd)
 		ft_clean(&blst);
 		return (0);
 	}
-	new = 0;
 	fill_list(fd, &blst);
 	buffer = ft_line(&blst);
 	return (buffer);
